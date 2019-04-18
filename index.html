@@ -91,7 +91,6 @@
   <p>In this study we ask you to imagine that you are in the market to purchase a product/service. <br>Please choose from the set below which product you would <b>most</b> likely purchase.</p>
   <form action="#" method="post" class="demoForm" id="productForm" style="display: none;">
       <fieldset>
-
           <label><input type="radio" name="ship" value="Shoes." checked /> Shoes</label>
           <label><input type="radio" name="ship" value="Chocolate." /> Chocolate</label>
           <label><input type="radio" name="ship" value="an overnight stay in a hotel." />an overnight stay in a hotel</label>
@@ -99,28 +98,26 @@
           <label><input type="radio" name="ship" value="a Mobile Phone." />Mobile Phone</label>
           <label><input type="radio" name="ship" value="a Car." />Car</label>
       </p>
-
       <p><button type="button" class="btn" name="getVal" id="formBtn" onclick="getProduct()">This One</button></p>
       <!--MUST specify the button type as 'button'. If the button type is not specified,
           browser will set it to 'reset' or 'submit' which causes the page to reload.-->
-
       </fieldset>
 </div>
 
 <div id ="instructionsOne" style="display: none;">
     <p> Now we would like you to imagine that you are purchasing <b id="product"></b> </p>
-    <p> You will be presented with choice-sets that represent options related to this purchase. The choice-sets will look similar to the image below.</p>
+    <p> You will be shown options related to this purchase that look like the image below.</p>
     <img src="/study_assets/SR-Exp3/S-R_DCE.svg" alt="DCE-ExampleHere">
-    <p> As can be seen above, each choice-set will contain two options (option <b>A</b> and option <b>B</b>) and each option will have two attributes (Price and Quality).</p>
-    <p>For each choice-set, we ask that you select the option you most prefer by pressing the <kbd>Z</kbd> button for option <b>A</b>
-        or by pressing the <kbd>/</kbd> button for option <b>B</b>. <br><b>However, do not respond when you see the choice-set appear. You will be instructed when to respond.</b></p>
+    <p> You will see two options (option <b>A</b> and option <b>B</b>) and each option
+        will have two attributes: <em>Price</em> and <em>Quality</em>.</p>
+    <p> Choices can be made by pressing the <kbd>Z</kbd> button for option <b>A</b>
+        or by pressing the <kbd>/</kbd> button for option <b>B</b>.
 </div>
 
 
 <div id="instructionsTwo" class="iTwoWrapper" style="display:none;">
   <div id="iTwoP1">
-       <p>  You <strong>must</strong> choose your preferred option within the response window.</p>
-       <p> <b>The response window occurs when you see the following screen.</b></p>
+       <p> You <strong>MUST</strong> choose your preferred option when you see the screen below.</p>
   </div>
   <div id="iTwoP2">
       <p>************</p>
@@ -128,11 +125,10 @@
       <p>************</p>
   </div>
   <div id="iTwoP3">
-       <p> Do not respond before the response window appears. Your response will not be recorded.</p>
+       <p> Do not respond before you see the screen above - your response will not be recorded.</p>
        <p> It is okay to feel some time pressure when making your choices, but please try to indicate your most preferred option as often as you can.</p>
-       <p> There are <b>no</b> correct or incorrect answers, our main interest is that you choose the option you most prefer. </p>
-       <p> You will be asked to make <b id='howManyTrials'>XXXX</b> choices across <b id='blocks'></b> blocks.
-           This study will take approximately 45 minutes to complete. SONA points will be allocated after the experiment.</p>
+       <!--<p> You will be asked to make <b id='howManyTrials'>XXXX</b> choices across <b id='blocks'></b> blocks.-->
+       <p> This study will take approximately 45 minutes to complete. SONA points will be allocated after the experiment.</p>
   </div>
 </div>
 
@@ -199,8 +195,8 @@ var randomTimer = true; 										//is the timer random?
 var timerPresent = false;										//is the timer present?
 var tooSlowPresent = true;										//Does the choice timeout?
 var fastOrAccurate = [1,2]; 									// dont change this
-var nTrials = 3;												//amount of trials per block
-var nBlocks = 1;												//number of blocks
+var nTrials = 41;												//amount of trials per block
+var nBlocks = 12;												//number of blocks
 var waitTime = 2000;											// time someone has to wait after going too fast before they can continue
 var maxTrialTime = [];											//maximum trial time
 var maxTrialTimeOpt = [100, 200, 400, 800, 1200, 2000, 4000];						//Different trial times (used if randomTimer = true)
@@ -237,6 +233,8 @@ var currentTime;
 var experimentTotalTime;
 
 var contWaitTime;
+var instructDelay1;
+var instructDelay2;
 var timeout;
 var stimTimeout;
 var countdownTimeout;
@@ -407,6 +405,8 @@ function instructOne() {
   document.getElementById('product').innerHTML = yourProd;
 	experimentStartDate = new Date();
 	experimentStartTime = experimentStartDate.getTime();
+  instructDelay1 = setTimeout(instructOneButton, 10000)
+  /*
   // 1. Create the button
   var introButton = document.createElement("button");
   introButton.innerHTML = "Click here to continue";
@@ -415,7 +415,20 @@ function instructOne() {
   instructionsOne.appendChild(introButton);
   // 3. Add onclick
   introButton.setAttribute("class", "btn");
-  introButton.setAttribute("onclick", "instructTwo()");
+  introButton.setAttribute("onclick", "instructTwo()");*/
+}
+
+
+function instructOneButton (){
+  // 1. Create the button
+  var introButton = document.createElement("button");
+  introButton.innerHTML = "Click here to continue";
+  // 2. Append somewhere
+  document.getElementById('instructionsOne');
+  instructionsOne.appendChild(introButton);
+  // 3. Add onclick
+  introButton.setAttribute("class", "btn");
+  introButton.setAttribute("onclick", "instructTwo()")
 }
 
 
@@ -424,8 +437,22 @@ function instructTwo() {
   //console.log("instructTwo");
   instruxOne.hide()
   instruxTwo.show()
-	document.getElementById('howManyTrials').innerHTML = totaltrials;
-  document.getElementById('blocks').innerHTML = nBlocks;
+  instructDelay1 = setTimeout(instructTwoButton, 10000)
+	//document.getElementById('howManyTrials').innerHTML = totaltrials;
+  //document.getElementById('blocks').innerHTML = nBlocks;
+  /* 1. Create the button
+  var instructTwoContButton = document.createElement("button");
+  instructTwoContButton.innerHTML = "Click here to continue";
+  // 2. Append somewhere
+  document.getElementById('instructionsTwo');
+  instructionsTwo.appendChild(instructTwoContButton);
+  // 3. Add onclick
+  instructTwoContButton.setAttribute("class", "btn");
+  instructTwoContButton.setAttribute("onclick", "postInstruct()");*/
+}
+
+
+function instructTwoButton (){
   // 1. Create the button
   var instructTwoContButton = document.createElement("button");
   instructTwoContButton.innerHTML = "Click here to continue";
@@ -436,6 +463,9 @@ function instructTwo() {
   instructTwoContButton.setAttribute("class", "btn");
   instructTwoContButton.setAttribute("onclick", "postInstruct()");
 }
+
+
+
 
 
 function postInstruct() {
